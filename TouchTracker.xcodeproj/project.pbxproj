@@ -14,6 +14,8 @@
 		5A3626261E9004FB003D0E36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A3626241E9004FB003D0E36 /* LaunchScreen.storyboard */; };
 		5A3626311E9004FB003D0E36 /* TouchTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3626301E9004FB003D0E36 /* TouchTrackerTests.swift */; };
 		5A36263C1E9004FB003D0E36 /* TouchTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36263B1E9004FB003D0E36 /* TouchTrackerUITests.swift */; };
+		5A36264A1E900550003D0E36 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3626491E900550003D0E36 /* Line.swift */; };
+		5A36264C1E90059B003D0E36 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36264B1E90059B003D0E36 /* DrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		5A3626371E9004FB003D0E36 /* TouchTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TouchTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A36263B1E9004FB003D0E36 /* TouchTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchTrackerUITests.swift; sourceTree = "<group>"; };
 		5A36263D1E9004FB003D0E36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A3626491E900550003D0E36 /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		5A36264B1E90059B003D0E36 /* DrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,8 @@
 			children = (
 				5A36261B1E9004FB003D0E36 /* AppDelegate.swift */,
 				5A36261D1E9004FB003D0E36 /* ViewController.swift */,
+				5A3626491E900550003D0E36 /* Line.swift */,
+				5A36264B1E90059B003D0E36 /* DrawView.swift */,
 				5A36261F1E9004FB003D0E36 /* Main.storyboard */,
 				5A3626221E9004FB003D0E36 /* Assets.xcassets */,
 				5A3626241E9004FB003D0E36 /* LaunchScreen.storyboard */,
@@ -259,7 +265,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A36264A1E900550003D0E36 /* Line.swift in Sources */,
 				5A36261E1E9004FB003D0E36 /* ViewController.swift in Sources */,
+				5A36264C1E90059B003D0E36 /* DrawView.swift in Sources */,
 				5A36261C1E9004FB003D0E36 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
