@@ -16,6 +16,7 @@
 		5A36263C1E9004FB003D0E36 /* TouchTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36263B1E9004FB003D0E36 /* TouchTrackerUITests.swift */; };
 		5A36264A1E900550003D0E36 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3626491E900550003D0E36 /* Line.swift */; };
 		5A36264C1E90059B003D0E36 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36264B1E90059B003D0E36 /* DrawView.swift */; };
+		5A48214C1EA68CBD00900625 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A48214B1EA68CBD00900625 /* Circle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		5A36263D1E9004FB003D0E36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A3626491E900550003D0E36 /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		5A36264B1E90059B003D0E36 /* DrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
+		5A48214B1EA68CBD00900625 /* Circle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				5A36261B1E9004FB003D0E36 /* AppDelegate.swift */,
 				5A36261D1E9004FB003D0E36 /* ViewController.swift */,
 				5A3626491E900550003D0E36 /* Line.swift */,
+				5A48214B1EA68CBD00900625 /* Circle.swift */,
 				5A36264B1E90059B003D0E36 /* DrawView.swift */,
 				5A36261F1E9004FB003D0E36 /* Main.storyboard */,
 				5A3626221E9004FB003D0E36 /* Assets.xcassets */,
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A48214C1EA68CBD00900625 /* Circle.swift in Sources */,
 				5A36264A1E900550003D0E36 /* Line.swift in Sources */,
 				5A36261E1E9004FB003D0E36 /* ViewController.swift in Sources */,
 				5A36264C1E90059B003D0E36 /* DrawView.swift in Sources */,
@@ -513,6 +517,7 @@
 				5A3626421E9004FB003D0E36 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5A3626431E9004FB003D0E36 /* Build configuration list for PBXNativeTarget "TouchTrackerTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +526,7 @@
 				5A3626451E9004FB003D0E36 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5A3626461E9004FB003D0E36 /* Build configuration list for PBXNativeTarget "TouchTrackerUITests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +535,7 @@
 				5A3626481E9004FB003D0E36 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

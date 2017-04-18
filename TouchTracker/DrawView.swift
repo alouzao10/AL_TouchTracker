@@ -13,6 +13,10 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
     //var currentLine: Line?
     var currentLines = [NSValue:Line]()
     var finishedLines = [Line]()
+    
+    var currentCircle = Circle()
+    var finishedCircle = [Circle]()
+    
     var selectedLineIndex: Int? {
         didSet{
             if selectedLineIndex == nil{
@@ -156,6 +160,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         //UIColor.black.setStroke()
         finishedLineColor.setStroke()
         for line in finishedLines{
+            line.color.setStroke() // update the color of the line on start
             stroke(line)
         }
         
@@ -167,6 +172,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         //UIColor.red.setStroke()
         currentLineColor.setStroke()
         for(_, line) in currentLines{
+            line.color.setStroke() // update color of the line on end
             stroke(line)
         }
         
@@ -175,6 +181,16 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
             let selectedLine = finishedLines[index]
             stroke(selectedLine)
         }
+        // Draw Circles
+        finishedLineColor.setStroke()
+        for circle in finishedCircle {
+            let path = UIBezierPath(ovalIn: circle.rect)
+            path.lineWidth = lineThickness
+            path.stroke()
+        }
+        currentLineColor.setStroke()
+        UIBezierPath(ovalIn: currentCircle.rect).stroke()
+        
     }
     
     func indexOfLine(at point: CGPoint) -> Int? {
@@ -199,13 +215,19 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         let location = touch.location(in: self)
         currentLine = Line(begin: location, end: location)*/
         print(#function)
+        if touches.count == 2 {
+            let touchesArray = Array(touches)
+            let location1 = touchesArray[0].location(in: self)
+            let location2 = touchesArray[1].location(in: self)
+            currentCircle = Circle(point1: location1, point2: location2)
+        } else {
         for touch in touches {
             let location = touch.location(in: self)
             let newLine = Line(begin: location, end: location)
             let key = NSValue(nonretainedObject: touch)
             currentLines[key] = newLine
         }
-        
+        }
         setNeedsDisplay()
     }
     
@@ -213,12 +235,19 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         /*let touch = touches.first!
         let location = touch.location(in: self)
         currentLine?.end = location*/
+        
         print(#function)
+        if touches.count == 2 {
+            let touchesArray = Array(touches)
+            let location1 = touchesArray[0].location(in: self)
+            let location2 = touchesArray[1].location(in: self)
+            currentCircle = Circle(point1: location1, point2: location2)
+        } else {
         for touch in touches {
             let key = NSValue(nonretainedObject: touch)
             currentLines[key]?.end = touch.location(in: self)
         }
-        
+        }
         setNeedsDisplay()
     }
     
@@ -230,6 +259,14 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
             finishedLines.append(line)
         }
         currentLine = nil*/
+        if touches.count == 2 {
+            let touchesArray = Array(touches)
+            let location1 = touchesArray[0].location(in: self)
+            let location2 = touchesArray[1].location(in: self)
+            currentCircle = Circle(point1: location1, point2: location2)
+            finishedCircle.append(currentCircle)
+            currentCircle = Circle()
+        } else {
         for touch in touches{
             let key = NSValue(nonretainedObject: touch)
             if var line = currentLines[key] {
@@ -238,13 +275,14 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
                 currentLines.removeValue(forKey: key)
             }
         }
-        
+        }
         setNeedsDisplay()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(#function)
         currentLines.removeAll()
+        currentCircle = Circle()
         setNeedsDisplay()
     }
     
