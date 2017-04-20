@@ -11,6 +11,8 @@ import UIKit
 class DrawView: UIView, UIGestureRecognizerDelegate{
     
     //var currentLine: Line?
+    var longPressRecognizer: UILongPressGestureRecognizer!
+    
     var currentLines = [NSValue:Line]()
     var finishedLines = [Line]()
     
@@ -18,8 +20,8 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
     var finishedCircle = [Circle]()
     
     var selectedLineIndex: Int? {
-        didSet{
-            if selectedLineIndex == nil{
+        didSet {
+            if selectedLineIndex == nil {
                 let menu = UIMenuController.shared
                 menu.setMenuVisible(false, animated: true)
             }
@@ -27,18 +29,33 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
     }
     var moveRecognizer: UIPanGestureRecognizer!
     
-    required init? (coder aDecoder: NSCoder){
+    var maxRecordedVelocity: CGFloat = CGFloat.leastNonzeroMagnitude
+    var minRecordedVelocity: CGFloat = CGFloat.greatestFiniteMagnitude
+    var currentVelocity: CGFloat = 0
+    var currentLineWidth: CGFloat {
+        let maxLineWidth: CGFloat = 20
+        let minLineWidth: CGFloat = 1
+        // thin line shows faster velocity
+        let lineWidth = (maxRecordedVelocity - currentVelocity) / (maxRecordedVelocity - minRecordedVelocity) * (maxLineWidth - minLineWidth) + minLineWidth
+        return lineWidth
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(DrawView.doubleTap(_:)))
+        
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self,
+                                                         action: #selector(DrawView.doubleTap(_:)))
         doubleTapRecognizer.numberOfTapsRequired = 2
         doubleTapRecognizer.delaysTouchesBegan = true
         addGestureRecognizer(doubleTapRecognizer)
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(DrawView.tap(_:)))
         tapRecognizer.delaysTouchesBegan = true
+        tapRecognizer.require(toFail: doubleTapRecognizer)
         addGestureRecognizer(tapRecognizer)
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(DrawView.longPress(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self,
+                                                           action: #selector(DrawView.longPress(_:)))
         addGestureRecognizer(longPressRecognizer)
         
         moveRecognizer = UIPanGestureRecognizer(target: self, action: #selector(DrawView.moveLine(_:)))
@@ -52,6 +69,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         selectedLineIndex = nil
         currentLines.removeAll()
         finishedLines.removeAll()
+        finishedCircle.removeAll()
         setNeedsDisplay()
     }
     
@@ -77,22 +95,38 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
     }
     
     func longPress(_ gestureRecognizer: UIGestureRecognizer){
-        print("A Long Press")
+        print("Recognized a long press")
         
-        if gestureRecognizer.state == .began{
+        if gestureRecognizer.state == .began {
             let point = gestureRecognizer.location(in: self)
             selectedLineIndex = indexOfLine(at: point)
-            if selectedLineIndex != nil{
+            
+            if selectedLineIndex != nil {
                 currentLines.removeAll()
             }
         } else if gestureRecognizer.state == .ended {
             selectedLineIndex = nil
         }
+        
         setNeedsDisplay()
     }
     
     func moveLine(_ gestureRecognizer: UIPanGestureRecognizer){
         print("Recognize a Pan")
+        
+        let velocityInXY = gestureRecognizer.velocity(in: self)
+        currentVelocity = hypot(velocityInXY.x, velocityInXY.y)
+        
+        maxRecordedVelocity = max(maxRecordedVelocity, currentVelocity)
+        minRecordedVelocity = min(minRecordedVelocity, currentVelocity)
+        
+        print("Current Drawing Velocity: \(currentVelocity) points per second")
+        print("maxRecordedVelocity: \(maxRecordedVelocity) points per second")
+        print("minRecordedVelocity: \(minRecordedVelocity) points per second")
+        
+        guard longPressRecognizer.state == .changed || longPressRecognizer.state == .ended else {
+            return
+        }
         
         if let index = selectedLineIndex{
             if gestureRecognizer.state == .changed{
@@ -110,14 +144,13 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneousWithotherGestureRecognizer: UIGestureRecognizer) -> Bool{
-    
-       return true
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
+        otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     
-    override var canBecomeFirstResponder: Bool{
+    override var canBecomeFirstResponder: Bool {
         return true
     }
     
@@ -129,26 +162,27 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         }
     }
     
-    @IBInspectable var finishedLineColor: UIColor = UIColor.blue{
-        didSet{
+    @IBInspectable var finishedLineColor: UIColor = UIColor.blue {
+        didSet {
             setNeedsDisplay()
         }
     }
-    @IBInspectable var currentLineColor: UIColor = UIColor.black{
-        didSet{
+    @IBInspectable var currentLineColor: UIColor = UIColor.black {
+        didSet {
             setNeedsDisplay()
         }
     }
-    @IBInspectable var lineThickness: CGFloat = 10{
-        didSet{
+    @IBInspectable var lineThickness: CGFloat = 10 {
+        didSet {
             setNeedsDisplay()
         }
     }
+
     
     func stroke(_ line: Line){
         let path = UIBezierPath()
         //path.lineWidth = 10
-        path.lineWidth = lineThickness
+        path.lineWidth = line.lineWidth
         path.lineCapStyle = .round
         
         path.move(to: line.begin)
@@ -223,7 +257,8 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
         } else {
         for touch in touches {
             let location = touch.location(in: self)
-            let newLine = Line(begin: location, end: location)
+            //let newLine = Line(begin: location, end: location)
+            let newLine = Line(lineWidth: currentLineWidth, begin: location, end: location)
             let key = NSValue(nonretainedObject: touch)
             currentLines[key] = newLine
         }
@@ -271,6 +306,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate{
             let key = NSValue(nonretainedObject: touch)
             if var line = currentLines[key] {
                 line.end = touch.location(in: self)
+                line.lineWidth = currentLineWidth
                 finishedLines.append(line)
                 currentLines.removeValue(forKey: key)
             }
