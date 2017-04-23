@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  TouchTracker
 //
-//  Created by Alex Louzao on 4/1/17.
+//  Created by Alex Louzao on 4/23/17.
 //  Copyright © 2017 ALcsc2310. All rights reserved.
 //
 
